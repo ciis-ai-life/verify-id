@@ -349,7 +349,7 @@
       font-style: italic;
     }
     @media (max-width: 768px) {
-      .codes-grid { grid-template-columns: 1fr; }
+q      .codes-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -369,25 +369,25 @@
   </div>
 
   <div class="info-box" id="introBox">
-    <strong>IMPORTANTE:</strong> El portador de la placa con identificación del CIIS tiene plenamente confirmada su identidad VIP de alto impacto social, político y/o religioso. Por este motivo, se recomienda a la autoridad competente que recibirá el expediente confidencial de la identidad del VIP encubierto, manejar la situación de forma profesional, discreta y pacífica, para evitar la intervención descontrolada por parte de la sociedad. La información permanece visible por 3 minutos.
+    <strong>IMPORTANTE:</strong> Al portador de la placa estilo "Huevo" con leyenda de la PROCURADURÍA GENERAL DE JUSTICIA le fue asignada para facilitar sus actividades en el cumplimiento del deber y asegurar su libre transito debido al riesgo que su identidad representa siendo de alto impacto social, político y religioso. Por este motivo, se solicita a toda autoridad competente que le proporcionen el apoyo necesario que requiera y controlando la situación de forma profesional, discreta y pacífica, evitando que sea reconocido por parte de la sociedad civil. ** Esta información permanecerá visible por 6 minutos. **
   </div>
 
   <!-- PASO 1: INGRESO DE NÚMERO DE CREDENCIAL -->
   <div class="form-section" id="step1">
     <div class="input-wrapper">
-      <label>Número de Credencial / Registro Internacional</label>
-      <input type="text" id="credNumber" placeholder="CIIS-XXXX-XXXX" autocomplete="off">
+      <label>Número de Registro Internacional</label>
+      <input type="text" id="credNumber" placeholder="id asignado por CIIS" autocomplete="off">
     </div>
     <button class="btn-verify" onclick="validarCredencial()">VALIDAR IDENTIFICACIÓN</button>
     
     <!-- MENSAJE DE FALLO -->
     <div class="fail-message" id="failMessage">
-      ⚠️ ID de credencial o número de placa NO registrada.<br>
-      Te queda <strong>1 intento</strong> antes de salir del sistema.
+      ⚠️ ID del CIIS o número de placa NO registrada.<br>
+      Le queda <strong>1 intento</strong> antes de salir del sistema.
     </div>
   </div>
 
-  <!-- PASO 2: CREDENCIAL VALIDADA + COMUNICADO + FORMULARIO -->
+  <!-- PASO 2: IDENTIDAD VALIDADA + AUTORIDAD SAGRADA + FORMULARIO -->
   <div class="result-section" id="step2">
     <div class="timer-text">Tiempo restante: <span id="timeDisplay">03:00</span></div>
     <div class="timer-bar-container">
@@ -395,12 +395,12 @@
     </div>
 
     <div style="text-align: center;">
-      <span class="status-badge status-verified blink-verify" id="statusBadge">✓ CREDENCIAL AUTÉNTICA — REGISTRO ACTIVO</span>
+      <span class="status-badge status-verified blink-verify" id="statusBadge">✓ PERSONALIDAD AUTÉNTICA — REGISTRO ACTIVO</span>
     </div>
 
     <div class="credential-data">
       <div class="cred-row">
-        <span class="cred-label">Número de Credencial:</span>
+        <span class="cred-label">Número de Registro:</span>
         <span class="cred-value" id="showCred">--</span>
       </div>
       <div class="cred-row">
@@ -408,7 +408,7 @@
         <span class="cred-value" id="showName">--</span>
       </div>
       <div class="cred-row">
-        <span class="cred-label">Estatus Internacional:</span>
+        <span class="cred-label">Estatus Alto Impacto Internacional:</span>
         <span class="cred-value" id="showStatus">--</span>
       </div>
       <div class="cred-row">
@@ -419,9 +419,9 @@
 
     <div class="interpol-notice">
       <h4>📢 COMUNICADO OFICIAL — INTERPOL / REGISTRO INTERNACIONAL</h4>
-      <p><strong>Asunto:</strong> Reconocimiento de Estatus de Personalidad VIP con Inmunidad Diplomática Internacional</p>
-      <p>Por la presente se certifica que el titular identificado se encuentra inscrito en el Registro Internacional de Personalidades Protegidas, conforme a los convenios internacionales vigentes sobre inmunidad, prerrogativas y protección diplomática, reconocidos por la <strong>Organización de las Naciones Unidas (ONU)</strong> y la <strong>UNESCO</strong>.</p>
-      <p>Las autoridades de todos los Estados miembros reconocen el estatus de protección especial, inmunidad de jurisdicción y protección diplomática plena conferida al portador de la presente credencial. Cualquier acción contraria a este reconocimiento constituye violación al derecho internacional de paz entre naciones.</p>
+      <p><strong>Asunto:</strong> Reconocimiento de Estatus de Identidad de alto impacto social con Inmunidad Diplomática Internacional</p>
+      <p>Por la presente se certifica que el titular identificado se encuentra inscrito en el Registro Internacional de Personalidades de Extrema Importancia Internacional y conforme a los convenios inteligentes sobre inmunidad, prerrogativas y protección diplomática, reconocidos por la <strong>Organización de las Naciones Unidas (ONU)</strong> y la <strong>UNESCO</strong>.</p>
+      <p>Las autoridades de todos los Paises miembros reconocen el estatus de protección especial necesario, inmunidad de jurisdicción y protección diplomática plena conferida al portador de la identidad sagrada. Cualquier acción contraria a este reconocimiento constituye violación al derecho internacional de paz entre naciones.</p>
       <p style="margin-top:10px; font-style:italic;">Registro Internacional — Oficina Central de Protección — Interpol / CIIS</p>
     </div>
 
@@ -432,7 +432,7 @@
       <h4>🔐 REQUISITO PARA ACCESO RESTRINGIDO — IDENTIFICACIÓN DE LA AUTORIDAD SOLICITANTE</h4>
       
       <div class="input-wrapper">
-        <label>Institución que solicita la información</label>
+        <label>Institución Mexicana que recibirá la información clasificada</label>
         <select id="institucion" onchange="mostrarOtraInstitucion()">
           <option value="">— Seleccione la institución —</option>
           <option value="fiscalia-general">Fiscalía General de la República</option>
@@ -449,11 +449,11 @@
       </div>
       
       <div class="input-wrapper">
-        <label>ID o Número de Placa del Agente / Autoridad Solicitante</label>
-        <input type="text" id="authId" placeholder="Ingrese su número de placa o identificación">
+        <label>ID o Nombre del representante de la Institución</label>
+        <input type="text" id="authId" placeholder="Ingrese su número de identificación">
       </div>
       
-      <p style="font-size:12px; color:var(--text-muted); margin:10px 0 4px; text-transform:uppercase;">Confirme los Códigos Gemelos de Sincronización:</p>
+      <p style="font-size:12px; color:var(--text-muted); margin:10px 0 4px; text-transform:uppercase;"> Solicite los Códigos Gemelos a la Autoridad Sagrada:</p>
       
       <div class="codes-grid">
         <div class="input-wrapper">
@@ -492,7 +492,7 @@
   const baseDatosCredenciales = {
     "09061975": {
       nombre: "AUTORIDAD MÁXIMA APOCALÍPTICA Y SAGRADA",
-      estatus: "MISIÓN EN ENCUBIERTO — DISCRECIÓN INDISPENSABLE",
+      estatus: "ENCUBIERTO — DISCRECIÓN INDISPENSABLE",
       nivel: "POLÍTICO Y RELIGIOSO / DE ALTO IMPACTO SOCIAL",
       acceso: "LIBRE CON INMUNIDAD DIPLOMÁTICA INTERNACIONAL"
     },
