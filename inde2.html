@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CIIS - Verificación Nivel Sagrado</title>
+  <style>
+    :root {
+      --bg-main: #0f172a;
+      --bg-card: #1e293b;
+      --border-color: #334155;
+      --accent-gold: #eab308;
+      --accent-cyan: #38bdf8;
+      --accent-red: #ef4444;
+      --accent-green: #22c55e;
+      --text-white: #ffffff;
+      --text-muted: #94a3b8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      background-color: var(--bg-main);
+      color: #e2e8f0;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .ciis-container {
+      width: 100%;
+      max-width: 900px;
+      background-color: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    }
+    .ciis-header {
+      text-align: center;
+      border-bottom: 2px solid var(--accent-gold);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    .ciis-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-white);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0;
+    }
+    .ciis-subtitle {
+      font-size: 12px;
+      color: var(--accent-gold);
+      margin-top: 6px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .animated-line {
+      font-size: 13px;
+      margin-bottom: 6px;
+      font-family: 'Courier New', monospace;
+    }
+    .blink-cyan {
+      color: var(--accent-cyan);
+      animation: blinkCyan 1.2s infinite;
+    }
+    .blink-gold {
+      color: var(--accent-gold);
+      animation: blinkGold 1.2s infinite;
+    }
+    @keyframes blinkCyan {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+    @keyframes blinkGold {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+    .blink-verify {
+      animation: blinkVerify 0.9s infinite alternate;
+    }
+    @keyframes blinkVerify {
+      0% { opacity: 0.7; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.03); }
+    }
+    .info-box {
+      background-color: rgba(56, 189, 248, 0.1);
+      border-left: 3px solid var(--accent-cyan);
+      padding: 16px;
+      font-size: 14px;
+      color: #cbd5e1;
+      margin-bottom: 24px;
+      border-radius: 0 8px 8px 0;
+      line-height: 1.8;
+    }
+    .form-section {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .input-wrapper {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 16px;
+    }
+    .input-wrapper label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .input-wrapper input,
+    .input-wrapper select {
+      background-color: var(--bg-main);
+      border: 1px solid var(--border-color);
+      color: var(--text-white);
+      padding: 12px 14px;
+      border-radius: 6px;
+      font-size: 15px;
+      font-family: inherit;
+    }
+    .input-wrapper select:focus,
+    .input-wrapper input:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
+    }
+    .input-wrapper input.invalid {
+      border-color: var(--accent-red);
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+    }
+    .btn-verify {
+      width: 100%;
+      background-color: var(--accent-gold);
+      color: var(--bg-main);
+      font-weight: 800;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    .btn-verify:hover { background-color: #facc15; }
+    .btn-verify:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      background-color: #9ca3af;
+    }
+    .btn-proceed {
+      background-color: var(--accent-green);
+      margin-top: 12px;
+    }
+    .btn-proceed:hover { background-color: #4ade80; }
+    .btn-logout {
+      background-color: transparent;
+      color: var(--accent-red);
+      border: 1px solid var(--accent-red);
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+      margin-top: 16px;
+    }
+    .btn-logout:hover { background-color: rgba(239, 68, 68, 0.15); }
+    .fail-message {
+      color: var(--accent-red);
+      font-weight: 600;
+      font-size: 13px;
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--accent-red);
+      border-radius: 6px;
+      background-color: rgba(239, 68, 68, 0.08);
+      display: none;
+    }
+    .result-section {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 24px;
+      display: none;
+    }
+    .timer-bar-container {
+      width: 100%;
+      height: 8px;
+      background-color: var(--bg-main);
+      border-radius: 4px;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    .timer-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-green), var(--accent-gold), var(--accent-red));
+      width: 100%;
+      transition: width 1s linear;
+    }
+    .timer-text {
+      text-align: right;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      font-family: 'Courier New', monospace;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+    .status-verified {
+      background-color: rgba(34, 197, 94, 0.15);
+      color: var(--accent-green);
+      border: 1px solid var(--accent-green);
+    }
+    .interpol-notice {
+      background-color: rgba(56, 189, 248, 0.08);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+    .interpol-notice h4 {
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 0;
+      margin-bottom: 14px;
+      font-size: 15px;
+    }
+    .credential-data {
+      background-color: var(--bg-main);
+      border: 1px solid var(--accent-gold);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .cred-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .cred-row:last-child { border-bottom: none; }
+    .cred-label {
+      color: var(--text-muted);
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+    .cred-value {
+      color: var(--text-white);
+      font-weight: 600;
+      text-align: right;
+    }
+    .authority-form {
+      border-top: 1px solid var(--border-color);
+      padding-top: 24px;
+      margin-top: 20px;
+      display: none;
+    }
+    .authority-form h4 {
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .codes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .code-input {
+      text-align: center;
+      font-size: 22px;
+      letter-spacing: 6px;
+      font-weight: bold;
+    }
+    .match-status {
+      text-align: center;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      height: 24px;
+      font-weight: 500;
+    }
+    .match-ok { color: var(--accent-green); }
+    .match-wait { color: var(--text-muted); }
+    .match-no { color: var(--accent-red); }
+    .logout-screen {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .logout-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      color: var(--accent-cyan);
+    }
+    .logout-title {
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      font-size: 22px;
+    }
+    .logout-text {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .ciis-disclaimer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 11px;
+      color: #64748b;
+      letter-spacing: 0.5px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 18px;
+      font-style: italic;
+    }
+    optgroup {
+      color: #b0b8c4;
+      font-weight: 600;
+    }
+    @media (max-width: 640px) {
+      .codes-grid { grid-template-columns: 1fr; }
+      .cred-row { flex-direction: column; gap: 4px; }
+      .cred-value { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+<div class="ciis-container" id="mainContainer">
+  <div class="ciis-header">
+    <div class="ciis-title">Centro de Investigación de Identidad Soberana</div>
+    <div class="ciis-subtitle">Verificación de Autoridad — Nivel Sagrado</div>
+  </div>
+
+  <div class="animated-line blink-cyan">
+    📡 Coordenadas detectadas: País de conexión — México
+  </div>
+  <div class="animated-line blink-gold">
+    🌐 Activado: Idioma — Español
+  </div>
+
+  <div class="info-box" id="introBox">
+    <strong>IMPORTANTE:</strong> Al portador de la placa estilo "Huevo" con leyenda de la PROCURADURÍA GENERAL DE JUSTICIA (PGJ) le fue asignada para facilitar sus actividades en el cumplimiento del deber y asegurar su <strong>libre tránsito</strong>, debido al riesgo que su identidad representa siendo de alto impacto social, político y religioso. Por este motivo, se solicita a toda autoridad competente que le proporcionen el apoyo necesario que requiera y controlen la situación de forma profesional, discreta y pacífica, evitando que sea reconocido por la sociedad civil.<br><br>
+    <strong>Esta información permanecerá visible por 6 minutos.</strong>
+  </div>
+
+  <!-- PASO 1: INGRESO DE NÚMERO DE CREDENCIAL -->
+  <div class="form-section" id="step1">
+    <div class="input-wrapper">
+      <label>Número de Registro Internacional</label>
+      <input type="text" id="credNumber" placeholder="ID asignado por el CIIS" autocomplete="off">
+    </div>
+    <button class="btn-verify" onclick="validarCredencial()">VALIDAR IDENTIFICACIÓN</button>
+    
+    <div class="fail-message" id="failMessage">
+      ⚠️ ID del CIIS o número de placa NO registrado.<br>
+      Le queda <strong>1 intento</strong> antes de salir del sistema.
+    </div>
+  </div>
+
+  <!-- PASO 2: IDENTIDAD VALIDADA + FORMULARIO + CÓDIGOS -->
+  <div class="result-section" id="step2">
+    <div class="timer-text">Tiempo restante: <span id="timeDisplay">06:00</span></div>
+    <div class="timer-bar-container">
+      <div class="timer-bar" id="timerBar"></div>
+    </div>
+
+    <div style="text-align: center;">
+      <span class="status-badge status-verified blink-verify" id="statusBadge">✓ PERSONALIDAD AUTÉNTICA — REGISTRO ACTIVO</span>
+    </div>
+
+    <div class="credential-data">
+      <div class="cred-row">
+        <span class="cred-label">Número de Registro:</span>
+        <span class="cred-value" id="showCred">--</span>
+      </div>
+      <div class="cred-row">
+        <span class="cred-label">Titular / Personalidad:</span>
+        <span class="cred-value" id="showName">--</span>
+      </div>
+      <div class="cred-row">
+        <span class="cred-label">Estatus Alto Impacto Internacional:</span>
+        <span class="cred-value" id="showStatus">--</span>
+      </div>
+      <div class="cred-row">
+        <span class="cred-label">Nivel de Acceso:</span>
+        <span class="cred-value" id="showLevel">--</span>
+      </div>
+    </div>
+
+    <div class="interpol-notice">
+      <h4>📢 COMUNICADO OFICIAL — INTERPOL / REGISTRO INTERNACIONAL</h4>
+      <p><strong>Asunto:</strong> Reconocimiento de Estatus de Identidad de alto impacto social con Inmunidad Diplomática Internacional</p>
+      <p>Por la presente se certifica que el titular identificado se encuentra inscrito en el Registro Internacional de Personalidades de Extrema Importancia Internacional y conforme a los convenios internacionales sobre inmunidad, prerrogativas y protección diplomática, reconocidos por la <strong>Organización de las Naciones Unidas (ONU)</strong> y la <strong>UNESCO</strong>.</p>
+      <p>Las autoridades de todos los Países miembros reconocen el estatus de protección especial necesario, inmunidad de jurisdicción y protección diplomática plena conferida al portador de la identidad sagrada. Cualquier acción contraria a este reconocimiento constituye violación al derecho internacional de paz entre naciones.</p>
+      <p style="margin-top:10px; font-style:italic;">Registro Internacional — Oficina Central de Protección — Interpol / CIIS</p>
+    </div>
+
+    <button class="btn-verify btn-proceed" id="btnShowForm" onclick="mostrarFormularioAutoridad()">Acceder a Expediente</button>
+
+    <!-- FORMULARIO DE AUTORIDAD Y CÓDIGOS GEMELOS -->
+    <div class="authority-form" id="authorityForm">
+      <h4>🔐 REQUISITO PARA ACCESO RESTRINGIDO — IDENTIFICACIÓN DE LA AUTORIDAD SOLICITANTE</h4>
+      
+      <div class="input-wrapper">
+        <label for="institucion">Institución mexicana que recibirá la información clasificada</label>
+        <select id="institucion" name="institucion" onchange="mostrarotrainstitucion()" required>
+          <option value="">— Seleccione una institución —</option>
+          <optgroup label="Seguridad Nacional, Defensa y Justicia">
+            <option value="SEDENA">Secretaría de la Defensa Nacional (SEDENA)</option>
+            <option value="SEMAR">Secretaría de Marina (SEMAR)</option>
+            <option value="SSPC">Secretaría de Seguridad y Protección Ciudadana (SSPC)</option>
+            <option value="GN">Guardia Nacional (GN)</option>
+            <option value="CNI">Centro Nacional de Inteligencia (CNI)</option>
+            <option value="FGR">Fiscalía General de la República (FGR)</option>
+          </optgroup>
+          <optgroup label="Gobierno, Hacienda y Relaciones Exteriores">
+            <option value="SEGOB">Secretaría de Gobernación (SEGOB)</option>
+            <option value="SRE">Secretaría de Relaciones Exter
