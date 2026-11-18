@@ -363,7 +363,7 @@
   </div>
 
   <div class="info-box" id="introBox">
-    <strong>IMPORTANTE:</strong> Al portador de la placa estilo "Huevo" con leyenda de la PROCURADURÍA GENERAL DE JUSTICIA (PGJ) le fue asignada para facilitar sus actividades en el cumplimiento del deber y asegurar su <strong>libre tránsito</strong>, debido al riesgo que su identidad representa siendo de alto impacto social, político y religioso. Por este motivo, se solicita a toda autoridad competente que le proporcionen el apoyo necesario que requiera y controlen la situación de forma profesional, discreta y pacífica, evitando que sea reconocido por la sociedad civil.<br><br>
+    <strong>IMPORTANTE:</strong> Al portador de la placa con leyenda de la PROCURADURÍA GENERAL DE JUSTICIA (PGJ) le fue asignada para facilitar sus actividades en el cumplimiento del deber y asegurar su <strong>libre tránsito</strong>, debido al riesgo que su identidad representa siendo de alto impacto social, político y religioso. Por este motivo, se solicita a toda autoridad competente que le proporcionen el apoyo necesario que requiera y controlen la situación de forma profesional, discreta y pacífica, evitando que sea reconocido por la sociedad civil.<br><br>
     <strong>Esta información permanecerá visible por 6 minutos.</strong>
   </div>
 
@@ -440,3 +440,206 @@
           <optgroup label="Gobierno, Hacienda y Relaciones Exteriores">
             <option value="SEGOB">Secretaría de Gobernación (SEGOB)</option>
             <option value="SRE">Secretaría de Relaciones Exter
+            <option value="SAT">Servicio de Administración Tributaria (SAT)</option>
+            <option value="UIF">Unidad de Inteligencia Financiera (UIF)</option>
+            <option value="SFP">Secretaría de la Función Pública (SFP)</option>
+          </optgroup>
+          <optgroup label="Órganos Autónomos y Poder Judicial">
+            <option value="SCJN">Suprema Corte de Justicia de la Nación (SCJN)</option>
+            <option value="CJF">Consejo de la Judicatura Federal (CJF)</option>
+            <option value="INAI">Instituto Nacional de Transparencia, Acceso a la Información y Protección de Datos Personales (INAI)</option>
+            <option value="INE">Instituto Nacional Electoral (INE)</option>
+            <option value="BANXICO">Banco de México (Banxico)</option>
+            <option value="CNDH">Comisión Nacional de los Derechos Humanos (CNDH)</option>
+          </optgroup>
+          <optgroup label="Otras dependencias">
+            <option value="otra">Otra institución (especificar)</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <!-- Campo oculto que se muestra al elegir "Otra institución" -->
+      <div class="input-wrapper" id="otra-institucion-wrapper" style="display: none; margin-top: 10px;">
+        <label for="otra_institucion">Especifique el nombre de la institución:</label>
+        <input type="text" id="otra_institucion" name="otra_institucion" placeholder="Ej. Secretaría de Energía (SENER)">
+      </div>
+
+      <div class="input-wrapper" style="margin-top: 24px;">
+        <label>🔑 Código de Acceso ALFA (Primera Casilla)</label>
+        <input type="text" id="codigoAlfa" class="code-input" maxlength="3" placeholder="___" autocomplete="off">
+      </div>
+
+      <div class="input-wrapper">
+        <label>🔑 Código de Acceso OMEGA (Segunda Casilla)</label>
+        <input type="text" id="codigoOmega" class="code-input" maxlength="3" placeholder="___" autocomplete="off">
+      </div>
+
+      <div class="match-status" id="matchStatus">Ingrese ambos códigos</div>
+
+      <button class="btn-verify" id="btnAcceder" onclick="verificarCodigos()" style="margin-top: 16px;" disabled>VERIFICAR Y ACCEDER</button>
+
+      <button class="btn-logout" onclick="cerrarSesion()">CERRAR SESIÓN ANTES DE TIEMPO</button>
+    </div>
+  </div>
+
+  <!-- Pantalla de cierre por tiempo -->
+  <div class="logout-screen" id="logoutScreen">
+    <div class="logout-icon">⏱️</div>
+    <div class="logout-title">SESIÓN FINALIZADA</div>
+    <div class="logout-text">
+      El tiempo de acceso ha expirado por seguridad.<br>
+      Debe reiniciar el proceso de verificación para consultar nuevamente.
+    </div>
+    <button class="btn-verify" style="margin-top: 24px;" onclick="location.reload()">REINICIAR</button>
+  </div>
+
+  <div class="ciis-disclaimer">
+    Protocolo de Validación Global CIIS · Fecha de edición: 21 de octubre de 2026<br>
+    Nivel de Acceso: ULTRA-CLASIFICADO / SEGURIDAD NACIONAL E INTERNACIONAL
+  </div>
+</div>
+
+<script>
+  // Datos de la credencial
+  const datosCredencial = {
+    id: 'CIIS-TAMID-369-666-F001-V2.2',
+    nombre: 'Sergio Javier Parra Murguía',
+    estatus: 'ENCUBIERTO · INMUNIDAD DIPLOMÁTICA INTERNACIONAL',
+    nivel: 'ULTRA-CLASIFICADO / SEGURIDAD NACIONAL E INTERNACIONAL'
+  };
+
+  const CODIGO_ALFA_CORRECTO = '369';
+  const CODIGO_OMEGA_CORRECTO = '666';
+  const URL_DESTINO = 'https://ciis-ai-life.github.io/verify-id/alfaomega.html';
+  const TIEMPO_SEGUNDOS = 360; // 6 minutos
+
+  let intentosRestantes = 2;
+  let temporizadorActivo = false;
+  let tiempoRestante = TIEMPO_SEGUNDOS;
+  let intervaloTiempo = null;
+
+  function validarCredencial() {
+    const input = document.getElementById('credNumber');
+    const valor = input.value.trim();
+    const failMsg = document.getElementById('failMessage');
+
+    if (valor === datosCredencial.id || valor === '369666') {
+      // Credencial correcta
+      document.getElementById('step1').style.display = 'none';
+      document.getElementById('step2').style.display = 'block';
+      
+      // Mostrar datos
+      document.getElementById('showCred').textContent = datosCredencial.id;
+      document.getElementById('showName').textContent = datosCredencial.nombre;
+      document.getElementById('showStatus').textContent = datosCredencial.estatus;
+      document.getElementById('showLevel').textContent = datosCredencial.nivel;
+      
+      // Iniciar temporizador
+      iniciarTemporizador();
+      
+    } else {
+      intentosRestantes--;
+      input.classList.add('invalid');
+      failMsg.style.display = 'block';
+      
+      if (intentosRestantes <= 0) {
+        setTimeout(() => {
+          cerrarSesion();
+        }, 2000);
+      }
+    }
+  }
+
+  function mostrarFormularioAutoridad() {
+    document.getElementById('authorityForm').style.display = 'block';
+    document.getElementById('btnShowForm').style.display = 'none';
+    verificarEstadoCodigos();
+  }
+
+  function mostrarotrainstitucion() {
+    const selectInstitucion = document.getElementById("institucion");
+    const wrapperOtra = document.getElementById("otra-institucion-wrapper");
+    const inputOtra = document.getElementById("otra_institucion");
+
+    if (selectInstitucion.value === "otra") {
+      wrapperOtra.style.display = "block";
+      inputOtra.setAttribute("required", "required");
+    } else {
+      wrapperOtra.style.display = "none";
+      inputOtra.removeAttribute("required");
+      inputOtra.value = "";
+    }
+  }
+
+  function verificarEstadoCodigos() {
+    const alfa = document.getElementById('codigoAlfa').value.trim();
+    const omega = document.getElementById('codigoOmega').value.trim();
+    const status = document.getElementById('matchStatus');
+    const btn = document.getElementById('btnAcceder');
+
+    if (alfa === '' || omega === '') {
+      status.textContent = 'Ingrese ambos códigos';
+      status.className = 'match-status match-wait';
+      btn.disabled = true;
+    } else if (alfa === CODIGO_ALFA_CORRECTO && omega === CODIGO_OMEGA_CORRECTO) {
+      status.textContent = '✅ Códigos coinciden — Acceso Autorizado';
+      status.className = 'match-status match-ok';
+      btn.disabled = false;
+    } else {
+      status.textContent = '❌ Códigos no coinciden — Verifique nuevamente';
+      status.className = 'match-status match-no';
+      btn.disabled = true;
+    }
+  }
+
+  function verificarCodigos() {
+    const alfa = document.getElementById('codigoAlfa').value.trim();
+    const omega = document.getElementById('codigoOmega').value.trim();
+
+    if (alfa === CODIGO_ALFA_CORRECTO && omega === CODIGO_OMEGA_CORRECTO) {
+      window.location.href = URL_DESTINO;
+    }
+  }
+
+  // Escuchar cambios en los campos de códigos
+  document.getElementById('codigoAlfa').addEventListener('input', verificarEstadoCodigos);
+  document.getElementById('codigoOmega').addEventListener('input', verificarEstadoCodigos);
+
+  function iniciarTemporizador() {
+    if (temporizadorActivo) return;
+    temporizadorActivo = true;
+    
+    actualizarDisplayTiempo();
+    intervaloTiempo = setInterval(() => {
+      tiempoRestante--;
+      actualizarDisplayTiempo();
+      
+      if (tiempoRestante <= 0) {
+        clearInterval(intervaloTiempo);
+        cerrarSesion();
+      }
+    }, 1000);
+  }
+
+  function actualizarDisplayTiempo() {
+    const minutos = Math.floor(tiempoRestante / 60);
+    const segundos = tiempoRestante % 60;
+    document.getElementById('timeDisplay').textContent = 
+      `${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+    
+    // Actualizar barra de progreso
+    const porcentaje = (tiempoRestante / TIEMPO_SEGUNDOS) * 100;
+    document.getElementById('timerBar').style.width = porcentaje + '%';
+  }
+
+  function cerrarSesion() {
+    if (intervaloTiempo) clearInterval(intervaloTiempo);
+    temporizadorActivo = false;
+    
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step2').style.display = 'none';
+    document.getElementById('logoutScreen').style.display = 'block';
+  }
+</script>
+</body>
+</html>
